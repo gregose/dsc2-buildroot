@@ -1,0 +1,20 @@
+bootpart=0:1
+devtype=mmc
+bootdir=
+bootfile=zImage
+bootpartition=mmcblk0p2
+console=ttyS0,115200n8
+loadaddr=0x82000000
+fdtaddr=0x88000000
+fdtovaddr=0x880c0000
+
+fdtoverlays=BOTIC-00A0.dtb BB-SPIDEV0-00A0.dtb
+
+boticargs=snd_soc_botic.serconfig=MM-- snd_soc_davinci_mcasp.mute_pins=8 snd_soc_davinci_mcasp.amanero_mute_delay=500 snd_soc_davinci_mcasp.amanero_mute_pins=8 snd_soc_botic.ext_masterclk=7 snd_soc_botic.clk_44k1=45158400 snd_soc_botic.clk_48k=49152000
+
+expandfdt=fdt addr $fdtaddr;fdt resize 8192
+loadfdtoverlays=for ov in ${fdtoverlays}; do load ${devtype} ${bootpart} ${fdtovaddr} ${bootdir}/${ov} && fdt apply ${fdtovaddr}; done
+
+set_mmc1=if test $board_name = A33515BB; then setenv bootpartition mmcblk1p2; fi
+set_bootargs=setenv bootargs console=${console} ${boticargs} root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
+uenvcmd=run set_mmc1; run set_bootargs;run loadimage;run loadfdt;run expandfdt;run loadfdtoverlays;printenv bootargs;bootz ${loadaddr} - ${fdtaddr}
