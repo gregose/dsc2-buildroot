@@ -2,5 +2,5 @@
 
 ```
 # cd buildroot
-# make BR2_EXTERNAL=../dsc2-buildroot dsc2_defconfig
+# make BR2_EXTERNAL=../ dsc2_defconfig
 ```
