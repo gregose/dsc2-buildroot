@@ -1,0 +1,1 @@
+source "$BR2_EXTERNAL_DSC2_PATH/package/roonbridge/Config.in"

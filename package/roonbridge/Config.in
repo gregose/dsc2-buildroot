@@ -1,0 +1,15 @@
+config BR2_PACKAGE_ROONBRIDGE
+		bool "roonbridge"
+		help
+		  Prebuilt Roon Bridge server
+		select BR2_PACKAGE_ALSA_LIB
+
+if BR2_PACKAGE_ROONBRIDGE
+
+config BR2_PACKAGE_ROONBRIDGE_ARCH
+		string "architecture for binaries"
+		default "armv7hf" if BR2_ARM_CPU_ARMV7A
+		help
+		  Architecture for prebuilt RoonBridge binaries. See https://help.roonlabs.com/portal/en/kb/articles/linux-install for options.
+
+endif
