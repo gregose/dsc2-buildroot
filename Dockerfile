@@ -20,8 +20,9 @@ RUN apt-get update && apt-get install -y -q \
     make \
     patch \
     perl \
-    python \
-    python-matplotlib \
+    python3 \
+    python3-matplotlib \
+    python3-setuptools \
     rsync \
     sed \
     tar \

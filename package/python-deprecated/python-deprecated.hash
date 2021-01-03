@@ -1,0 +1,6 @@
+# md5, sha256 from https://pypi.org/pypi/deprecated/json
+md5  b5d0b816a13dec7daa45dbfe6b4d77f9  Deprecated-1.2.10.tar.gz
+sha256  525ba66fb5f90b07169fdd48b6373c18f1ee12728ca277ca44567a367d9d7f74  Deprecated-1.2.10.tar.gz
+# Locally computed sha256 checksums
+sha256  1e83edd15be419b5d5bde372e325e527ff4f9915f548e7c75314b41f6699e83c  LICENSE.rst
+sha256  15af6caa9610570263262417d09ca2f20723bdbf158acda94315db941337bd70  docs/source/license.rst

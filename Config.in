@@ -1,1 +1,9 @@
 source "$BR2_EXTERNAL_DSC2_PATH/package/roonbridge/Config.in"
+source "$BR2_EXTERNAL_DSC2_PATH/package/python-adafruit-bbio/Config.in"
+source "$BR2_EXTERNAL_DSC2_PATH/package/python-deprecated/Config.in"
+source "$BR2_EXTERNAL_DSC2_PATH/package/python-lumacore/Config.in"
+source "$BR2_EXTERNAL_DSC2_PATH/package/python-lumaoled/Config.in"
+source "$BR2_EXTERNAL_DSC2_PATH/package/python-pyftdi/Config.in"
+source "$BR2_EXTERNAL_DSC2_PATH/package/python-pyserial/Config.in"
+source "$BR2_EXTERNAL_DSC2_PATH/package/python-smbus2/Config.in"
+
