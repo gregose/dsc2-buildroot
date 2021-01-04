@@ -6,6 +6,9 @@ DAEMON=/opt/RoonBridge/start.sh
 # Sanity checks
 test -f $DAEMON || exit 0
 
+export ROON_DATAROOT=/var/roon
+export ROON_ID_DIR=/var/roon
+
 start() {
         printf "Starting $NAME: "
         start-stop-daemon --start --quiet --background --exec $DAEMON \

@@ -1,0 +1,5 @@
+config BR2_PACKAGE_BOTIC_CARD
+		bool "botic-card"
+		help
+		  Botic card kernel module
+

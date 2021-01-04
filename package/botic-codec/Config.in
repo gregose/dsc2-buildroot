@@ -1,0 +1,5 @@
+config BR2_PACKAGE_BOTIC_CODEC
+		bool "botic-codec"
+		help
+		  Botic codec kernel module
+

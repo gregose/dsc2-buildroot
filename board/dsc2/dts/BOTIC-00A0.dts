@@ -21,8 +21,6 @@
 
 	/* state the resources this cape uses */
 	exclusive-use =
-		"P9.17",	/* i2c1_scl */
-		"P9.18",	/* i2c1_sda */
 		/* the pin header uses */
 		"P9.25",	/* mcasp0_ahclkx (oscillator) */
 		"P9.31",	/* mcaps0_aclkx (bit clock) */
@@ -35,7 +33,6 @@
 		"P9.26",	/* uart1_rxd (I2S/DSD format switch) */
 		"P9.14",	/* gpmc_a2 (cape power switch) */
 		/* the hardware IP uses */
-		"i2c1",
 		"mcasp0";
 
 	fragment@0 {
@@ -70,7 +67,6 @@
 
 			clkout2_custom_pin: pinmux_clkout2_custom_pin {
 				pinctrl-single,pins = <
-
 					AM33XX_IOPAD(0x9b4, PIN_INPUT | MUX_MODE7)
 				>;
 			};
@@ -93,13 +89,6 @@
 					
 				>;
 			};
-			
-			i2c1_pins: pinmux_bb_i2c1_pins {
-				pinctrl-single,pins = <
-					AM33XX_IOPAD(0x958, PIN_INPUT_PULLUP | SLEWCTRL_SLOW | MUX_MODE2)
-					AM33XX_IOPAD(0x95c, PIN_INPUT_PULLUP | SLEWCTRL_SLOW | MUX_MODE2)
-				>;
-			};
 		};
 	};
 
@@ -108,7 +97,7 @@
 
 		__overlay__ {
 
-       			clk48: clk48 {
+       		clk48: clk48 {
 				#clock-cells = <0>;
 				compatible = "fixed-clock";
 				clock-frequency = <49152000>;
@@ -149,19 +138,6 @@
 				dsd-gpios = <&gpio0 14 0>;
 				enable-gpios = <&gpio1 18 0>;
 			};
-		};
-	};
-	
-	/* (Hermes-BBB) The I2C1 for isolated I2C access. */
-	fragment@3 {
-		target = <&i2c1>;
-		__overlay__ {
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "okay";
-			pinctrl-names = "default";
-			pinctrl-0 = <&i2c1_pins>;
-			clock-frequency = <100000>;
 		};
 	};
 	
