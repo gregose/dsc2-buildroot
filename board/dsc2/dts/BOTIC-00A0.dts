@@ -118,8 +118,8 @@
 			clkmux: clkmux {
 				#clock-cells = <0>;
 				compatible = "gpio-mux-clock";
-				clocks = <&clk44>, <&clk48>;
-				select-gpios = <&gpio0 15 0>;
+				clocks = <&clk48>, <&clk44>;
+				select-gpios = <&gpio0 15 GPIO_ACTIVE_HIGH>;
 			};
 
 			botic_codec: botic_codec {
@@ -129,7 +129,7 @@
 				pinctrl-names = "default";
 				pinctrl-0 = <&botic_codec_pin>;
 
-				mute-gpios = <&gpio3 19 0>;
+				mute-gpios = <&gpio3 19 GPIO_ACTIVE_HIGH>;
 			};
 
 			sound {
@@ -146,8 +146,8 @@
 				audio-codec = <&botic_codec>;
 				audio-codec-dai = "botic-hifi";
 
-				dsd-gpios = <&gpio0 14 0>;
-				enable-gpios = <&gpio1 18 0>;
+				dsd-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
+				enable-gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;
 			};
 		};
 	};
@@ -165,11 +165,6 @@
 			>;
 			tx-num-evt = <32>;
 			rx-num-evt = <32>;
-			/*
-			gpio-controller;
-			#gpio-cells = <2>;
-			mute-gpios = <&mcasp0 3 GPIO_ACTIVE_LOW>;
-			*/
 		};
 	};
 };
