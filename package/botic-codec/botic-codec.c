@@ -10,6 +10,7 @@
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include <linux/of_platform.h>
+#include <linux/gpio/consumer.h>
 #include <sound/core.h>
 #include <sound/pcm.h>
 #include <sound/soc.h>
@@ -30,6 +31,47 @@
             SNDRV_PCM_FMTBIT_DSD_U32_LE | \
             0)
 
+/* codec private data */
+struct botic_priv {
+	struct gpio_desc *mute;
+};
+
+static int botic_startup(struct snd_pcm_substream *substream,
+            struct snd_soc_dai *dai)
+{
+    struct snd_soc_component *component = dai->component;
+    struct botic_priv *botic = snd_soc_component_get_drvdata(component);
+
+    gpiod_set_value_cansleep(botic->mute, 1);
+
+    return 0;
+}
+
+static void botic_shutdown(struct snd_pcm_substream *substream,
+            struct snd_soc_dai *dai)
+{
+	struct snd_soc_component *component = dai->component;
+	struct botic_priv *botic = snd_soc_component_get_drvdata(component);
+
+	gpiod_set_value_cansleep(botic->mute, 0);
+}
+
+static int botic_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
+{
+	struct botic_priv *botic = snd_soc_component_get_drvdata(dai->component);
+
+	if (botic->mute)
+		gpiod_set_value_cansleep(botic->mute, mute);
+
+	return 0;
+}
+
+static struct snd_soc_dai_ops botic_dai_ops = {
+    .startup        = botic_startup,
+    .shutdown       = botic_shutdown,
+	.mute_stream    = botic_mute_stream,
+};
+
 static struct snd_soc_dai_driver botic_codec_dai = {
     .name = BOTIC_CODEC_DAI_NAME,
     .playback = {
@@ -48,6 +90,7 @@ static struct snd_soc_dai_driver botic_codec_dai = {
         .rates = BOTIC_RATES,
         .formats = BOTIC_FORMATS,
     },
+    .ops = &botic_dai_ops,
 };
 
 static const struct snd_kcontrol_new botic_codec_controls[] = {
@@ -67,8 +110,30 @@ static struct snd_soc_component_driver botic_codec_socdrv = {
 
 static int asoc_botic_codec_probe(struct platform_device *pdev)
 {
-    return snd_soc_register_component(&pdev->dev,
+    struct botic_priv *botic;
+	int ret;
+
+    botic = devm_kzalloc(&pdev->dev, sizeof(struct botic_priv),
+						  GFP_KERNEL);
+    if (botic == NULL)
+        return -ENOMEM;
+
+    platform_set_drvdata(pdev, botic);
+
+    botic->mute = devm_gpiod_get(&pdev->dev, "mute", GPIOD_OUT_LOW);
+    if (IS_ERR(botic->mute)) {
+        ret = PTR_ERR(botic->mute);
+        dev_err(&pdev->dev, "Failed to get mute line: %d\n", ret);
+        return ret;
+    }
+
+    ret = snd_soc_register_component(&pdev->dev,
             &botic_codec_socdrv, &botic_codec_dai, 1);
+
+    if (ret < 0)
+        dev_err(&pdev->dev, "Failed to register component: %d\n", ret);
+
+	return ret;
 }
 
 #if defined(CONFIG_OF)
